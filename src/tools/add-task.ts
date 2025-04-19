@@ -2,16 +2,17 @@ import type { TodoistApi } from '@doist/todoist-api-typescript'
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 
+const nonEmptyString = z.string().transform((str) => (str.trim() === '' ? undefined : str))
+
 export function registerAddTask(server: McpServer, api: TodoistApi) {
     server.tool(
         'add-task',
         'Add a task to Todoist',
         {
             content: z.string(),
-            description: z.string().optional(),
-            projectId: z.string().optional().describe('The ID of a project to add the task to'),
-            assigneeId: z
-                .string()
+            description: nonEmptyString.optional(),
+            projectId: nonEmptyString.optional().describe('The ID of a project to add the task to'),
+            assigneeId: nonEmptyString
                 .optional()
                 .describe('The ID of a project collaborator to assign the task to'),
             priority: z
@@ -21,18 +22,17 @@ export function registerAddTask(server: McpServer, api: TodoistApi) {
                 .optional()
                 .describe('Task priority from 1 (normal) to 4 (urgent)'),
             labels: z.array(z.string()).optional(),
-            parentId: z.string().optional().describe('The ID of a parent task'),
-            deadlineDate: z
-                .string()
+            parentId: nonEmptyString.optional().describe('The ID of a parent task'),
+            deadlineDate: nonEmptyString
                 .optional()
-                .describe('Specific date in YYYY-MM-DD format relative to user’s timezone.'),
-            deadlineLang: z
-                .string()
+                .describe("Specific date in YYYY-MM-DD format relative to user's timezone."),
+            deadlineLang: nonEmptyString
                 .optional()
                 .describe('2-letter code specifying language of deadline.'),
         },
         async ({
             content,
+            description,
             projectId,
             parentId,
             assigneeId,
@@ -43,6 +43,7 @@ export function registerAddTask(server: McpServer, api: TodoistApi) {
         }) => {
             const task = await api.addTask({
                 content,
+                description,
                 projectId,
                 parentId,
                 assigneeId,
