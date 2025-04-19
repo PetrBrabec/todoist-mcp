@@ -16,6 +16,13 @@ export function registerGetSections(server: McpServer, api: TodoistApi) {
                 response = await api.getSections({ projectId, cursor: response.nextCursor })
                 sections.push(...response.results)
             }
+
+            if (sections.length === 0) {
+                return {
+                    content: [{ type: 'text', text: 'No sections found in this project' }],
+                }
+            }
+
             return {
                 content: sections.map((section) => ({
                     type: 'text',

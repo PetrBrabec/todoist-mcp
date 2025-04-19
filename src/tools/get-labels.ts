@@ -9,6 +9,13 @@ export function registerGetLabels(server: McpServer, api: TodoistApi) {
             response = await api.getLabels({ cursor: response.nextCursor })
             labels.push(...response.results)
         }
+
+        if (labels.length === 0) {
+            return {
+                content: [{ type: 'text', text: 'No labels found.' }],
+            }
+        }
+
         return {
             content: labels.map((label) => ({
                 type: 'text',

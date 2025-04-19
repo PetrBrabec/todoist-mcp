@@ -18,6 +18,13 @@ export function registerGetProjectCollaborators(server: McpServer, api: TodoistA
                 })
                 collaborators.push(...response.results)
             }
+
+            if (collaborators.length === 0) {
+                return {
+                    content: [{ type: 'text', text: 'No collaborators found for this project' }],
+                }
+            }
+
             return {
                 content: collaborators.map((collaborator) => ({
                     type: 'text',

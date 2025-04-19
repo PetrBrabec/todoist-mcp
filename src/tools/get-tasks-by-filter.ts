@@ -130,6 +130,13 @@ export function registerGetTasksByFilter(server: McpServer, api: TodoistApi) {
             })
             tasks.push(...response.results)
         }
+
+        if (tasks.length === 0) {
+            return {
+                content: [{ type: 'text', text: 'No tasks found' }],
+            }
+        }
+
         return {
             content: tasks.map((task) => ({
                 type: 'text',

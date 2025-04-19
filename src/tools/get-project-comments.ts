@@ -14,6 +14,13 @@ export function registerGetProjectComments(server: McpServer, api: TodoistApi) {
                 response = await api.getComments({ projectId, cursor: response.nextCursor })
                 comments.push(...response.results)
             }
+
+            if (comments.length === 0) {
+                return {
+                    content: [{ type: 'text', text: 'No comments found for this project' }],
+                }
+            }
+
             return {
                 content: comments.map((comment) => ({
                     type: 'text',

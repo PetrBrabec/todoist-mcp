@@ -16,6 +16,18 @@ export function registerGetTasks(server: McpServer, api: TodoistApi) {
                 response = await api.getTasks({ projectId, cursor: response.nextCursor })
                 tasks.push(...response.results)
             }
+
+            if (tasks.length === 0) {
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: projectId ? 'No tasks found in this project' : 'No tasks found',
+                        },
+                    ],
+                }
+            }
+
             return {
                 content: tasks.map((task) => ({
                     type: 'text',
