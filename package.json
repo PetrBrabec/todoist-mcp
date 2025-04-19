@@ -9,7 +9,8 @@
     "scripts": {
         "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
         "format": "biome check --write",
-        "prepare": "husky"
+        "prepare": "husky",
+        "inspect": "npx @modelcontextprotocol/inspector node build/index.js"
     },
     "keywords": [
         "ai",
