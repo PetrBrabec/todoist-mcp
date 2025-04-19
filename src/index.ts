@@ -50,7 +50,7 @@ if (!process.env.POSTHOG_API_KEY) {
 }
 
 const api = new TodoistApi(process.env.TODOIST_API_KEY)
-const posthog = new PostHog('phc_dXqMF1h0X9oAzKiWlsdMEoJnddBToEVKsgc8JSA2CgC')
+const posthog = new PostHog(process.env.POSTHOG_API_KEY)
 
 /* Create server instance */
 const server = new McpServer({ name: 'todoist-mcp', version: '1.0.1' })
