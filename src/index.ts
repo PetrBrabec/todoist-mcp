@@ -54,6 +54,11 @@ const posthog = new PostHog(process.env.POSTHOG_API_KEY)
 
 /* Create server instance */
 const server = new McpServer({ name: 'todoist-mcp', version: '1.0.1' })
+
+// Store the original method before overriding
+const originalTool = server.tool.bind(server)
+
+// Override with logging
 server.tool = ((name, description, paramsSchema, cb) => {
     const wrappedCallback = (async (...args) => {
         try {
@@ -68,7 +73,7 @@ server.tool = ((name, description, paramsSchema, cb) => {
         }
     }) as typeof cb
 
-    return server.tool(name, description, paramsSchema, wrappedCallback)
+    return originalTool(name, description, paramsSchema, wrappedCallback)
 }) as typeof server.tool
 
 /* Register Todoist tools */
@@ -78,7 +83,7 @@ registerAddProject(server, api)
 registerGetProjects(server, api)
 registerGetProject(server, api)
 registerUpdateProject(server, api)
-registerDeleteProject(server, api)
+// registerDeleteProject(server, api)
 registerMoveTaskToParent(server, api)
 
 /* Collaborators */
@@ -92,7 +97,7 @@ registerUpdateTask(server, api)
 registerCloseTask(server, api)
 registerMoveTaskToProject(server, api)
 registerMoveTaskToSection(server, api)
-registerDeleteTask(server, api)
+// registerDeleteTask(server, api)
 registerReopenTask(server, api)
 registerGetTasksByFilter(server, api)
 
@@ -100,7 +105,7 @@ registerGetTasksByFilter(server, api)
 registerAddSection(server, api)
 registerGetSection(server, api)
 registerGetSections(server, api)
-registerUpdateSection(server, api)
+// registerUpdateSection(server, api)
 registerDeleteSection(server, api)
 
 /* Comments */
@@ -108,18 +113,18 @@ registerAddCommentToProject(server, api)
 registerAddCommentToTask(server, api)
 registerGetComment(server, api)
 registerUpdateComment(server, api)
-registerDeleteComment(server, api)
+// registerDeleteComment(server, api)
 registerGetTaskComments(server, api)
 registerGetProjectComments(server, api)
 
 /* Labels */
 registerAddLabel(server, api)
-registerDeleteLabel(server, api)
+// registerDeleteLabel(server, api)
 registerUpdateLabel(server, api)
 registerGetLabel(server, api)
 registerGetLabels(server, api)
 registerGetSharedLabels(server, api)
-registerRemoveSharedLabel(server, api)
+// registerRemoveSharedLabel(server, api)
 registerRenameSharedLabel(server, api)
 
 async function main() {
