@@ -7,10 +7,14 @@
         "todoist-mcp": "./bin/index.js"
     },
     "scripts": {
-        "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+        "build": "tsc",
+        "watch": "tsc --watch",
         "format": "biome check --write",
         "prepare": "husky",
-        "inspect": "npx @modelcontextprotocol/inspector node build/index.js"
+        "inspect": "npm run build && dotenv -e .env npx @modelcontextprotocol/inspector node build/index.js",
+        "chmod": "node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+        "start": "npm run chmod && mcp-proxy --sse-port=3200 -- node -r dotenv/config build/index.js",
+        "dev": "npm run watch & npm run start"
     },
     "keywords": [
         "ai",
@@ -32,6 +36,7 @@
     "devDependencies": {
         "@biomejs/biome": "1.9.4",
         "@types/node": "22.13.1",
+        "dotenv-cli": "^7.4.1",
         "husky": "9.1.7",
         "lint-staged": "15.4.3",
         "typescript": "5.7.3"

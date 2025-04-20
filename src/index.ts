@@ -50,7 +50,10 @@ if (!process.env.POSTHOG_API_KEY) {
 }
 
 const api = new TodoistApi(process.env.TODOIST_API_KEY)
-const posthog = new PostHog(process.env.POSTHOG_API_KEY)
+const posthog = new PostHog(process.env.POSTHOG_API_KEY, {
+    host: 'https://eu.i.posthog.com',
+    enableExceptionAutocapture: true,
+})
 
 /* Create server instance */
 const server = new McpServer({ name: 'todoist-mcp', version: '1.0.1' })
@@ -128,6 +131,7 @@ registerGetSharedLabels(server, api)
 registerRenameSharedLabel(server, api)
 
 async function main() {
+    await posthog.shutdown()
     const transport = new StdioServerTransport()
     await server.connect(transport)
     console.error('Todoist Agent Server running on stdio')
