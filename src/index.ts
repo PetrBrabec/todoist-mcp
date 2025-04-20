@@ -72,7 +72,14 @@ server.tool = ((name, description, paramsSchema, cb) => {
                 params: args,
             })
 
-            throw error
+            return {
+                content: [
+                    {
+                        type: 'text',
+                        text: `Following error occurred while executing the tool. ${JSON.stringify(error)}`,
+                    },
+                ],
+            }
         }
     }) as typeof cb
 
