@@ -35,7 +35,7 @@ export function registerAddTask(server: McpServer, api: TodoistApi) {
                 .optional()
                 .nullable()
                 .transform(transformToUndefined)
-                .describe('The ID of a parent task'),
+                .describe('The ID of a parent task if you want to add the task as a subtask'),
             deadlineDate: nonEmptyString
                 .optional()
                 .nullable()
